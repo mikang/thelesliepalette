@@ -1,6 +1,6 @@
 var leslies = [
   {
     name: 'images/20160104.png',
-    colors: ['D7D6E2', '060710', '71E4E3', '59585D', 'C7F27F']
+    colors: ['BBF565', '5EE0DD', 'CECCDC', '47464B', '07080E']
   }
 ];
