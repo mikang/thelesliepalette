@@ -1,17 +1,7 @@
-var container;
-var camera, scene, renderer;
-var group;
-var mouseX = 0, mouseY = 0;
-
-var windowHalfX = window.innerWidth / 2;
-var windowHalfY = window.innerHeight / 2;
+var container, camera, scene, renderer;
 
 init();
 animate();
-
-function isPowerOfTwo(x) {
-  return (x & (x - 1)) == 0;
-}
 
 function init() {
   container = document.getElementById( 'container' );
@@ -22,31 +12,7 @@ function init() {
   scene = new THREE.Scene();
 
   var loader = new THREE.TextureLoader();
-  loader.load(leslies[0].name, function ( texture ) {
-    var geometry = new THREE.BoxGeometry( 256, 64, 512, 1, 1, 5);
-    var frontLeslieMaterial = new THREE.MeshBasicMaterial({map: texture});
-    var backTexture = texture.clone();
-    backTexture.flipY = false;
-    backTexture.needsUpdate = true;
-    var backLeslieMaterial = new THREE.MeshBasicMaterial({map: backTexture});
-    var topMaterial = new THREE.MeshBasicMaterial({color: '#' + leslies[0].colors[0]});
-    var bottomMaterial = new THREE.MeshBasicMaterial({color: '#' + leslies[0].colors[4]});
-    var sideMaterial = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
-    var materials = [
-      sideMaterial,
-      sideMaterial,
-      frontLeslieMaterial,
-      backLeslieMaterial,
-      topMaterial,
-      bottomMaterial,
-    ];
-    for(var i = 0; i < 20; i++) {
-      var colorIndex = Math.floor(i / 2) % 5;
-      geometry.faces[i].color.set( new THREE.Color('#' + leslies[0].colors[colorIndex]) );
-    }
-    var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
-    scene.add(mesh);
-  });
+  loadLeslie(loader, leslies[0]);
 
   var canvas = document.createElement( 'canvas' );
   canvas.width = 512;
@@ -67,4 +33,38 @@ function animate() {
   renderer.render( scene, camera );
 }
 
+function setSidePaletteColors(box, leslie) {
+  for (var i = 0; i < 10; i++) {
+    var colorIndex = Math.floor(i / 2) % 5;
+    box.faces[i].color.set(new THREE.Color('#' + leslie.colors[colorIndex]));
+  }
+  for (var i = 10; i < 20; i++) {
+    var colorIndex = Math.floor(i / 2) % 5;
+    box.faces[i].color.set(new THREE.Color('#' + leslie.colors[4 - colorIndex]));
+  }
+}
 
+function flipTexture(texture) {
+  var upsideTexture = texture.clone();
+  upsideTexture.flipY = false;
+  upsideTexture.needsUpdate = true;
+  return upsideTexture;
+}
+
+function loadLeslie(loader, leslie) {
+  loader.load(leslie.name, function ( leslieTexture ) {
+    var box = new THREE.BoxGeometry( 256, 64, 512, 1, 1, 5);
+
+    var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
+    setSidePaletteColors(box, leslie);
+
+    scene.add(new THREE.Mesh(box, new THREE.MeshFaceMaterial([
+      sidePalette,
+      sidePalette,
+      new THREE.MeshBasicMaterial({map: leslieTexture}),
+      new THREE.MeshBasicMaterial({map: flipTexture(leslieTexture)}),
+      new THREE.MeshBasicMaterial({color: '#' + leslie.colors[0]}),
+      new THREE.MeshBasicMaterial({color: '#' + leslie.colors[4]}),
+    ])));
+  });
+}
