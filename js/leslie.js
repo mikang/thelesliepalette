@@ -1,9 +1,51 @@
 function Leslie(textureLoader, baseLeslie) {
+  var setSidePaletteColors = function(box) {
+    for (var i = 0; i < 20; i++) {
+      var colorIndex = Math.floor(i / 2) % 5;
+      if (i >= 10) colorIndex = 4 - colorIndex;
+      box.faces[i].color.set(new THREE.Color('#' + exports.colors[colorIndex]));
+    }
+  };
+
+  var flipTexture = function (texture) {
+    var upsideTexture = texture.clone();
+    upsideTexture.flipY = false;
+    upsideTexture.needsUpdate = true;
+    return upsideTexture;
+  };
+
+  var rotate = function () {
+    exports.mesh.rotation.y += 0.001;
+    exports.mesh.rotation.x += 0.01;
+    exports.mesh.rotation.z += 0.001;
+  };
+
+  var fly = function () {
+    xPlus = exports.mesh.position.x + exports.currentVelocity.x;
+    yPlus = exports.mesh.position.y + exports.currentVelocity.y;
+    if (xPlus > window.innerWidth || xPlus < -(window.innerWidth)) {
+      exports.currentVelocity.x *= -1
+    }
+    exports.mesh.position.x += exports.currentVelocity.x;
+
+    if (yPlus > window.innerHeight || yPlus < -(window.innerHeight)) {
+      exports.currentVelocity.y *= -1
+    }
+    exports.mesh.position.y += exports.currentVelocity.y;
+  };
+
+  var getRandomVelocity = function() {
+    var sign = 1;
+    if (Math.random() < .5) { sign = -1; }
+
+    return sign * Math.random() * 150;
+  };
+
   var exports = {
     mesh: null,
     currentVelocity: {
-      x: 0.1,
-      y: 0.1
+      x: getRandomVelocity(),
+      y: getRandomVelocity()
     },
     name: baseLeslie.name,
     colors: baseLeslie.colors,
@@ -13,13 +55,13 @@ function Leslie(textureLoader, baseLeslie) {
         var box = new THREE.BoxGeometry( 256, 64, 512, 1, 1, 5);
 
         var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
-        exports._setSidePaletteColors(box);
+        setSidePaletteColors(box);
 
         exports.mesh = new THREE.Mesh(box, new THREE.MeshFaceMaterial([
           sidePalette,
           sidePalette,
           new THREE.MeshBasicMaterial({map: leslieTexture}),
-          new THREE.MeshBasicMaterial({map: exports._flipTexture(leslieTexture)}),
+          new THREE.MeshBasicMaterial({map: flipTexture(leslieTexture)}),
           new THREE.MeshBasicMaterial({color: '#' + exports.colors[0]}),
           new THREE.MeshBasicMaterial({color: '#' + exports.colors[4]}),
         ]));
@@ -29,27 +71,13 @@ function Leslie(textureLoader, baseLeslie) {
     },
 
     animate: function() {
-      exports.mesh.rotation.y += 0.001;
-      exports.mesh.rotation.x += 0.01;
-      exports.mesh.rotation.z += 0.001;
-    },
+      if (!exports.mesh) return;
 
-    _setSidePaletteColors: function(box) {
-      for (var i = 0; i < 20; i++) {
-        var colorIndex = Math.floor(i / 2) % 5;
-        if (i >= 10) colorIndex = 4 - colorIndex;
-        box.faces[i].color.set(new THREE.Color('#' + exports.colors[colorIndex]));
-      }
-    },
-
-    _flipTexture: function (texture) {
-      var upsideTexture = texture.clone();
-      upsideTexture.flipY = false;
-      upsideTexture.needsUpdate = true;
-      return upsideTexture;
+      rotate();
+      fly();
     }
   };
 
   return exports;
-};
+}
 
