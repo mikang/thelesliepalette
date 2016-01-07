@@ -21,32 +21,26 @@ function Leslie(textureLoader, baseLeslie) {
   };
 
   var fly = function () {
-    xPlus = exports.mesh.position.x + exports.currentVelocity.x;
-    yPlus = exports.mesh.position.y + exports.currentVelocity.y;
-    if (xPlus > window.innerWidth || xPlus < -(window.innerWidth)) {
-      exports.currentVelocity.x *= -1
-    }
+    var xPlus = exports.mesh.position.x + exports.currentVelocity.x,
+      yPlus = exports.mesh.position.y + exports.currentVelocity.y,
+      xMax = window.innerWidth / 2,
+      yMax = window.innerHeight / 2;
+
+    if (xPlus > xMax || xPlus < -xMax) exports.currentVelocity.x *= -1;
     exports.mesh.position.x += exports.currentVelocity.x;
 
-    if (yPlus > window.innerHeight || yPlus < -(window.innerHeight)) {
-      exports.currentVelocity.y *= -1
-    }
+    if (yPlus > yMax || yPlus < -yMax) exports.currentVelocity.y *= -1;
     exports.mesh.position.y += exports.currentVelocity.y;
   };
 
   var getRandomVelocity = function() {
-    var sign = 1;
-    if (Math.random() < .5) { sign = -1; }
-
-    return sign * Math.random() * 150;
+    var sign = (Math.random() < .5) ? 1 : -1;
+    return sign * Math.random();
   };
 
   var exports = {
     mesh: null,
-    currentVelocity: {
-      x: getRandomVelocity(),
-      y: getRandomVelocity()
-    },
+    currentVelocity: { x: getRandomVelocity(), y: getRandomVelocity()},
     name: baseLeslie.name,
     colors: baseLeslie.colors,
 
