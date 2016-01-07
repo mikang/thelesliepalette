@@ -1,4 +1,9 @@
 function Leslie(textureLoader, baseLeslie) {
+  var ROTATION = 0.005,
+    VELOCITY = 0.5,
+    CROP = 0.75,
+    ZMAX = 200;
+
   var setSidePaletteColors = function(box) {
     for (var i = 0; i < 20; i++) {
       var colorIndex = Math.floor(i / 2) % 5;
@@ -15,38 +20,43 @@ function Leslie(textureLoader, baseLeslie) {
   };
 
   var rotate = function () {
-    exports.mesh.rotation.y += 0.001;
-    exports.mesh.rotation.x += 0.01;
-    exports.mesh.rotation.z += 0.001;
+    exports.mesh.rotation.x += exports.currentRotation.x;
+    exports.mesh.rotation.y += exports.currentRotation.y;
+    exports.mesh.rotation.z += exports.currentRotation.z;
   };
 
   var fly = function () {
     var xPlus = exports.mesh.position.x + exports.currentVelocity.x,
       yPlus = exports.mesh.position.y + exports.currentVelocity.y,
-      xMax = window.innerWidth / 2,
-      yMax = window.innerHeight / 2;
+      zPlus = exports.mesh.position.z + exports.currentVelocity.z,
+      xMax = (window.innerWidth / 2) * CROP,
+      yMax = (window.innerHeight / 2) * CROP;
 
     if (xPlus > xMax || xPlus < -xMax) exports.currentVelocity.x *= -1;
     exports.mesh.position.x += exports.currentVelocity.x;
 
     if (yPlus > yMax || yPlus < -yMax) exports.currentVelocity.y *= -1;
     exports.mesh.position.y += exports.currentVelocity.y;
+
+    if (zPlus > ZMAX || zPlus < -ZMAX) exports.currentVelocity.z *= -1;
+    exports.mesh.position.z += exports.currentVelocity.z;
   };
 
-  var getRandomVelocity = function() {
+  var getRandom = function(constant) {
     var sign = (Math.random() < .5) ? 1 : -1;
-    return sign * Math.random();
+    return sign * Math.random() * constant;
   };
 
   var exports = {
     mesh: null,
-    currentVelocity: { x: getRandomVelocity(), y: getRandomVelocity()},
+    currentVelocity: { x: getRandom(VELOCITY), y: getRandom(VELOCITY), z: getRandom(VELOCITY) },
+    currentRotation: { x: getRandom(ROTATION), y: getRandom(ROTATION), z: getRandom(ROTATION) },
     name: baseLeslie.name,
     colors: baseLeslie.colors,
 
     load: function() {
       textureLoader.load(baseLeslie.name, function ( leslieTexture ) {
-        var box = new THREE.BoxGeometry( 256, 64, 512, 1, 1, 5);
+        var box = new THREE.BoxGeometry( 128, 32, 256, 1, 1, 5);
 
         var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
         setSidePaletteColors(box);
