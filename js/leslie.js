@@ -2,13 +2,13 @@ function Leslie(textureLoader, baseLeslie) {
   var ROTATION = 0.005,
     VELOCITY = 0.5,
     CROP = 0.75,
-    ZMAX = 200;
+    ZMAX = 500;
 
   var setSidePaletteColors = function(box) {
     for (var i = 0; i < 20; i++) {
       var colorIndex = Math.floor(i / 2) % 5;
       if (i >= 10) colorIndex = 4 - colorIndex;
-      box.faces[i].color.set(new THREE.Color('#' + exports.colors[colorIndex]));
+      box.faces[i].color.set(new THREE.Color(exports.colors[colorIndex]));
     }
   };
 
@@ -66,8 +66,8 @@ function Leslie(textureLoader, baseLeslie) {
           sidePalette,
           new THREE.MeshBasicMaterial({map: leslieTexture}),
           new THREE.MeshBasicMaterial({map: flipTexture(leslieTexture)}),
-          new THREE.MeshBasicMaterial({color: '#' + exports.colors[0]}),
-          new THREE.MeshBasicMaterial({color: '#' + exports.colors[4]}),
+          new THREE.MeshBasicMaterial({color: exports.colors[0]}),
+          new THREE.MeshBasicMaterial({color: exports.colors[4]}),
         ]));
 
         scene.add(exports.mesh);
