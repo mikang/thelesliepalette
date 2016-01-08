@@ -4,15 +4,15 @@ window.onload = function () {
             velocity: 3,
             zMax: 100,
             toFrontIter: 10,
-            toFrontX: 4,
+            toFrontX: 4
         },
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000),
         scene = new THREE.Scene(),
         renderer = new THREE.WebGLRenderer(),
         leslies = new Leslies(camera, options),
         lights = new Lights(),
-        canvas = document.createElement('canvas'),
         container = document.getElementById('container'),
+        canvas = document.createElement('canvas'),
         animate = function () {
             requestAnimationFrame(animate);
             leslies.animate();
@@ -27,21 +27,19 @@ window.onload = function () {
             event.preventDefault();
             event.clientX = event.touches[0].clientX;
             event.clientY = event.touches[0].clientY;
-            onDocumentMouseDown(event);
+            leslies.onClick(event);
         };
 
     camera.position.z = 750;
-
-    leslies.load(scene);
-    lights.load(scene, camera);
-
     renderer.setClearColor(0xf0f0f0);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     container.appendChild(renderer.domElement);
-    canvas.width = window.width;
-    canvas.height = window.height;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    leslies.load(scene);
+    lights.load(scene, camera);
 
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener('mousedown', leslies.onClick, false);
