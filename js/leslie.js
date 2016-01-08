@@ -24,8 +24,8 @@ function Leslie(textureLoader, baseLeslie) {
         var xPlus = exports.mesh.position.x + currentVelocity.x,
             yPlus = exports.mesh.position.y + currentVelocity.y,
             zPlus = exports.mesh.position.z + currentVelocity.z,
-            xMax = (window.innerWidth / 2) * CROP,
-            yMax = (window.innerHeight / 2) * CROP;
+            xMax = (window.innerWidth / 2) - 1,
+            yMax = (window.innerHeight / 2) - 1;
 
         if (xPlus > xMax || xPlus < -xMax) currentVelocity.x *= -1;
         exports.mesh.position.x += currentVelocity.x;
@@ -37,15 +37,30 @@ function Leslie(textureLoader, baseLeslie) {
         exports.mesh.position.z += currentVelocity.z;
     };
 
+    var flyToFront = function () {
+        var final = {
+          position: { x: 0, y: 0, z: ZMAX * 2.5},
+          rotation: {x: 1.5, y: 0, z: 0.6}
+        };
+
+        _.each(['position', 'rotation'], function (transform) {
+            _.each(['x', 'y', 'z'], function (dimension) {
+                if (exports.mesh[transform][dimension] != final[transform][dimension]) {
+                    exports.mesh[transform][dimension] += (final[transform][dimension] - exports.mesh[transform][dimension]) / TO_FRONT;
+                }
+            });
+        });
+    };
+
     var getRandom = function (constant) {
-        var sign = (Math.random() < .5) ? 1 : -1;
+        var sign = (Math.random() < 0.5) ? 1 : -1;
         return sign * Math.random() * constant;
     };
 
     var ROTATION = 0.005,
         VELOCITY = 3,
-        CROP = 0.75,
-        ZMAX = 500,
+        ZMAX = 200,
+        TO_FRONT = 10,
         currentVelocity = {x: getRandom(VELOCITY), y: getRandom(VELOCITY), z: getRandom(VELOCITY)},
         currentRotation = {x: getRandom(ROTATION), y: getRandom(ROTATION), z: getRandom(ROTATION)},
         name = baseLeslie.name,
@@ -55,36 +70,33 @@ function Leslie(textureLoader, baseLeslie) {
         mesh: null,
         selected: false,
 
-        load: function (scene) {
+        load: function (callback) {
             textureLoader.load(name, function (leslieTexture) {
                 var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5);
 
-                var sidePalette = new THREE.MeshLambertMaterial({vertexColors: THREE.FaceColors, reflectivity: 0});
+                var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
                 setSidePaletteColors(box);
 
                 exports.mesh = new THREE.Mesh(box, new THREE.MeshFaceMaterial([
                     sidePalette,
                     sidePalette,
-                    new THREE.MeshLambertMaterial({map: leslieTexture, reflectivity: 0}),
-                    new THREE.MeshLambertMaterial({map: flipTexture(leslieTexture), reflectivity: 0}),
-                    new THREE.MeshLambertMaterial({color: colors[0], reflectivity: 0}),
-                    new THREE.MeshLambertMaterial({color: colors[4], reflectivity: 0})
+                    new THREE.MeshLambertMaterial({map: leslieTexture}),
+                    new THREE.MeshLambertMaterial({map: flipTexture(leslieTexture)}),
+                    new THREE.MeshBasicMaterial({color: colors[0]}),
+                    new THREE.MeshBasicMaterial({color: colors[4]})
                 ]));
 
-                scene.add(exports.mesh);
+                callback();
             });
         },
 
         animate: function () {
-            if (!exports.mesh) return;
-
             if (exports.selected) {
-                // Animate leslie to the front
+                flyToFront();
             } else {
                 rotate();
                 fly();
             }
-
         },
 
         onClick: function (intersects) {
@@ -92,10 +104,10 @@ function Leslie(textureLoader, baseLeslie) {
         },
 
         onBlur: function () {
+            exports.mesh.position.z = ZMAX;
             exports.selected = false;
         }
     };
 
     return exports;
 }
-

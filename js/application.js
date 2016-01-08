@@ -1,4 +1,4 @@
-$(function () {
+window.onload = function () {
     function animate() {
         requestAnimationFrame(animate);
         leslies.animate();
@@ -19,7 +19,7 @@ $(function () {
         onDocumentMouseDown(event);
     }
 
-    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000),
+    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000),
         scene = new THREE.Scene(),
         renderer = new THREE.WebGLRenderer(),
         leslies = new Leslies(camera),
@@ -45,6 +45,4 @@ $(function () {
     document.addEventListener('touchstart', onDocumentTouchStart, false);
 
     animate();
-});
-
-
+};

@@ -10,7 +10,7 @@ function Lights() {
                 new THREE.PointLight(0xffffff, 0.5, 0)
             ];
 
-            lights[0].position.set(0, 0, camera.position.z);
+            lights[0].position.set(0, 0, 750);
             lights[1].position.set(500, 1000, 100);
             lights[2].position.set(-500, 1000, 100);
             lights[3].position.set(0, -1000, 100);
