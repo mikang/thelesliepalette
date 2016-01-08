@@ -87,8 +87,12 @@ function Leslie(textureLoader, baseLeslie) {
 
         },
 
-        onClick: function () {
+        onClick: function (intersects) {
             exports.selected = true;
+        },
+
+        onBlur: function () {
+            exports.selected = false;
         }
     };
 

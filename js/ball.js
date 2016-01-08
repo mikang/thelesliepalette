@@ -41,9 +41,8 @@ function Ball(color) {
             fly();
         },
 
-        onClick: function () {
-            // noop
-        }
+        onClick: $.noop,
+        onBlur: $.noop,
     };
 
     return exports;

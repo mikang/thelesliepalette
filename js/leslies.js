@@ -19,11 +19,13 @@ function Leslies(camera) {
 
             raycaster.setFromCamera(mouse, camera);
 
+
             exports.collection.every(function (item) {
                 var intersects = raycaster.intersectObject(item.mesh);
                 if (intersects.length > 0) {
-                    item.onClick();
+                    item.onClick(intersects);
                 } else {
+                    if (item.selected) item.onBlur();
                     return true;
                 }
             });
