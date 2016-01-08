@@ -1,6 +1,6 @@
 function Leslie(textureLoader, baseLeslie) {
   var ROTATION = 0.005,
-    VELOCITY = 0.5,
+    VELOCITY = 3,
     CROP = 0.75,
     ZMAX = 500;
 
@@ -54,7 +54,7 @@ function Leslie(textureLoader, baseLeslie) {
     name: baseLeslie.name,
     colors: baseLeslie.colors,
 
-    load: function() {
+    load: function(scene) {
       textureLoader.load(baseLeslie.name, function ( leslieTexture ) {
         var box = new THREE.BoxGeometry( 128, 32, 256, 1, 1, 5);
 
