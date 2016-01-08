@@ -14,19 +14,19 @@ function Leslies(camera) {
         onClick: function (event) {
             event.preventDefault();
 
-            mouse.x = ( event.clientX / window.innerWidth.clientWidth ) * 2 - 1;
-            mouse.y = -( event.clientY / window.innerHeight.clientHeight ) * 2 + 1;
+            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
 
-            var meshes = _.map(exports.collection, 'mesh');
-            var intersects = raycaster.intersectObjects(meshes);
-
-            if (intersects.length > 0) {
-                console.log("Intersection YES");
-            } else {
-                console.log("Intersection NO");
-            }
+            exports.collection.every(function (item) {
+                var intersects = raycaster.intersectObject(item.mesh);
+                if (intersects.length > 0) {
+                    item.onClick();
+                } else {
+                    return true;
+                }
+            });
         },
 
         load: function (scene) {

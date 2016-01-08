@@ -39,6 +39,10 @@ function Ball(color) {
         animate: function () {
             if (!exports.mesh) return;
             fly();
+        },
+
+        onClick: function () {
+            // noop
         }
     };
 

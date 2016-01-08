@@ -1,14 +1,9 @@
 function Leslie(textureLoader, baseLeslie) {
-    var ROTATION = 0.005,
-        VELOCITY = 3,
-        CROP = 0.75,
-        ZMAX = 500;
-
     var setSidePaletteColors = function (box) {
         for (var i = 0; i < 20; i++) {
             var colorIndex = Math.floor(i / 2) % 5;
             if (i >= 10) colorIndex = 4 - colorIndex;
-            box.faces[i].color.set(new THREE.Color(exports.colors[colorIndex]));
+            box.faces[i].color.set(new THREE.Color(colors[colorIndex]));
         }
     };
 
@@ -20,26 +15,26 @@ function Leslie(textureLoader, baseLeslie) {
     };
 
     var rotate = function () {
-        exports.mesh.rotation.x += exports.currentRotation.x;
-        exports.mesh.rotation.y += exports.currentRotation.y;
-        exports.mesh.rotation.z += exports.currentRotation.z;
+        exports.mesh.rotation.x += currentRotation.x;
+        exports.mesh.rotation.y += currentRotation.y;
+        exports.mesh.rotation.z += currentRotation.z;
     };
 
     var fly = function () {
-        var xPlus = exports.mesh.position.x + exports.currentVelocity.x,
-            yPlus = exports.mesh.position.y + exports.currentVelocity.y,
-            zPlus = exports.mesh.position.z + exports.currentVelocity.z,
+        var xPlus = exports.mesh.position.x + currentVelocity.x,
+            yPlus = exports.mesh.position.y + currentVelocity.y,
+            zPlus = exports.mesh.position.z + currentVelocity.z,
             xMax = (window.innerWidth / 2) * CROP,
             yMax = (window.innerHeight / 2) * CROP;
 
-        if (xPlus > xMax || xPlus < -xMax) exports.currentVelocity.x *= -1;
-        exports.mesh.position.x += exports.currentVelocity.x;
+        if (xPlus > xMax || xPlus < -xMax) currentVelocity.x *= -1;
+        exports.mesh.position.x += currentVelocity.x;
 
-        if (yPlus > yMax || yPlus < -yMax) exports.currentVelocity.y *= -1;
-        exports.mesh.position.y += exports.currentVelocity.y;
+        if (yPlus > yMax || yPlus < -yMax) currentVelocity.y *= -1;
+        exports.mesh.position.y += currentVelocity.y;
 
-        if (zPlus > ZMAX || zPlus < -ZMAX) exports.currentVelocity.z *= -1;
-        exports.mesh.position.z += exports.currentVelocity.z;
+        if (zPlus > ZMAX || zPlus < -ZMAX) currentVelocity.z *= -1;
+        exports.mesh.position.z += currentVelocity.z;
     };
 
     var getRandom = function (constant) {
@@ -47,15 +42,21 @@ function Leslie(textureLoader, baseLeslie) {
         return sign * Math.random() * constant;
     };
 
+    var ROTATION = 0.005,
+        VELOCITY = 3,
+        CROP = 0.75,
+        ZMAX = 500,
+        currentVelocity = {x: getRandom(VELOCITY), y: getRandom(VELOCITY), z: getRandom(VELOCITY)},
+        currentRotation = {x: getRandom(ROTATION), y: getRandom(ROTATION), z: getRandom(ROTATION)},
+        name = baseLeslie.name,
+        colors = baseLeslie.colors;
+
     var exports = {
         mesh: null,
-        currentVelocity: {x: getRandom(VELOCITY), y: getRandom(VELOCITY), z: getRandom(VELOCITY)},
-        currentRotation: {x: getRandom(ROTATION), y: getRandom(ROTATION), z: getRandom(ROTATION)},
-        name: baseLeslie.name,
-        colors: baseLeslie.colors,
+        selected: false,
 
         load: function (scene) {
-            textureLoader.load(baseLeslie.name, function (leslieTexture) {
+            textureLoader.load(name, function (leslieTexture) {
                 var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5);
 
                 var sidePalette = new THREE.MeshLambertMaterial({vertexColors: THREE.FaceColors, reflectivity: 0});
@@ -66,8 +67,8 @@ function Leslie(textureLoader, baseLeslie) {
                     sidePalette,
                     new THREE.MeshLambertMaterial({map: leslieTexture, reflectivity: 0}),
                     new THREE.MeshLambertMaterial({map: flipTexture(leslieTexture), reflectivity: 0}),
-                    new THREE.MeshLambertMaterial({color: exports.colors[0], reflectivity: 0}),
-                    new THREE.MeshLambertMaterial({color: exports.colors[4], reflectivity: 0})
+                    new THREE.MeshLambertMaterial({color: colors[0], reflectivity: 0}),
+                    new THREE.MeshLambertMaterial({color: colors[4], reflectivity: 0})
                 ]));
 
                 scene.add(exports.mesh);
@@ -77,8 +78,17 @@ function Leslie(textureLoader, baseLeslie) {
         animate: function () {
             if (!exports.mesh) return;
 
-            rotate();
-            fly();
+            if (exports.selected) {
+                // Animate leslie to the front
+            } else {
+                rotate();
+                fly();
+            }
+
+        },
+
+        onClick: function () {
+            exports.selected = true;
         }
     };
 
