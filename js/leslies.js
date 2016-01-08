@@ -25,7 +25,10 @@ function Leslies(camera) {
             var meshes = _.map(exports.leslies, 'mesh'),
               intersects = raycaster.intersectObjects(meshes);
 
-            if (exports.selectedId) exports.leslies[exports.selectedId].onBlur();
+            if (exports.selectedId) {
+                exports.leslies[exports.selectedId].onBlur();
+                exports.selectedId = null;
+            }
 
             if (intersects.length > 0) {
                 exports.selectedId = intersects[0].object.id;
