@@ -16,6 +16,10 @@
     "colors": ["#FF5D32", "#FFCA36", "#9DAEDC", "#0F2D97", "#300B58"]
   },
   {
+    "name": "leslies/20160107a.png",
+    "colors": ["#0F0D0D", "#75667B", "#A9D3C9", "#E6E536", "#E3C7B9"]
+  },
+  {
     "name": "leslies/20160107b.png",
     "colors": ["#0F0D0D", "#222717", "#8F918E", "#E3C7B9", "#FFFFFF"]
   }
