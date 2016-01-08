@@ -13,7 +13,7 @@ function Leslies(camera, options) {
         exports = {
             balls: [],
             leslies: {},
-            selectedId: null,
+            selectedId: false,
 
             onClick: function (event) {
                 event.preventDefault();
@@ -24,14 +24,16 @@ function Leslies(camera, options) {
                 var meshes = _.map(exports.leslies, 'mesh'),
                   intersects = raycaster.intersectObjects(meshes);
 
-                if (exports.selectedId) {
-                    exports.leslies[exports.selectedId].onBlur();
-                    exports.selectedId = null;
-                }
-
                 if (intersects.length > 0) {
+                    if (exports.selectedId && exports.selectedId != intersects[0].object.id) {
+                        exports.leslies[exports.selectedId].onBlur();
+                    }
+
                     exports.selectedId = intersects[0].object.id;
                     exports.leslies[exports.selectedId].onClick(intersects);
+                } else if (exports.selectedId) {
+                    exports.leslies[exports.selectedId].onBlur();
+                    exports.selectedId = false;
                 }
             },
 

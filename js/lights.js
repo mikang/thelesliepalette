@@ -21,4 +21,4 @@ function Lights() {
             scene.add(lights[3]);
         }
     };
-};
+}

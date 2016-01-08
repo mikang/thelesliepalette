@@ -18,16 +18,17 @@ window.onload = function () {
         onDocumentMouseDown(event);
     }
 
-    var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000),
-        scene = new THREE.Scene(),
-        renderer = new THREE.WebGLRenderer(),
-        leslies = new Leslies(camera, {
+    var options = {
             rotation: 0.005,
             velocity: 3,
             zMax: 100,
             toFrontIter: 10,
             toFrontX: 4,
-        }),
+        },
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000),
+        scene = new THREE.Scene(),
+        renderer = new THREE.WebGLRenderer(),
+        leslies = new Leslies(camera, options),
         lights = new Lights(),
         canvas = document.createElement('canvas'),
         container = document.getElementById('container');

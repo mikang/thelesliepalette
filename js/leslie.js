@@ -1,13 +1,23 @@
 function Leslie(textureLoader, leslieDB, options) {
     var currentVelocity = Helpers.getRandomXYZ(options.velocity),
         currentRotation = Helpers.getRandomXYZ(options.rotation),
-        name = leslieDB.name,
-        colors = leslieDB.colors,
+        removePaletteColor = function () {
+            var selectedColorDiv = document.getElementById('selected-color')
+            if (selectedColorDiv) selectedColorDiv.remove();
+        },
+        addPaletteColor = function (colorString) {
+            var selectedColorDiv = document.createElement('div');
+            selectedColorDiv.innerHTML = '#' + colorString;
+            selectedColorDiv.id = 'selected-color';
+            selectedColorDiv.style.top = (window.innerHeight / 2) + 150 + 'px';
+            selectedColorDiv.style.left = (window.innerWidth / 2) + 'px';
+            document.body.appendChild(selectedColorDiv);
+        },
         setSidePaletteColors = function (box) {
             for (var i = 0; i < 20; i++) {
                 var colorIndex = Math.floor(i / 2) % 5;
                 if (i >= 10) colorIndex = 4 - colorIndex;
-                box.faces[i].color.set(new THREE.Color(colors[colorIndex]));
+                box.faces[i].color.set(new THREE.Color(leslieDB.colors[colorIndex]));
             }
         },
         rotate = function () {
@@ -40,7 +50,7 @@ function Leslie(textureLoader, leslieDB, options) {
             selected: false,
 
             load: function (callback) {
-                textureLoader.load(name, function (leslieTexture) {
+                textureLoader.load(leslieDB.name, function (leslieTexture) {
                     var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5);
 
                     var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
@@ -51,8 +61,8 @@ function Leslie(textureLoader, leslieDB, options) {
                         sidePalette,
                         new THREE.MeshLambertMaterial({map: leslieTexture}),
                         new THREE.MeshLambertMaterial({map: flipAndCloneTexture(leslieTexture)}),
-                        new THREE.MeshBasicMaterial({color: colors[0]}),
-                        new THREE.MeshBasicMaterial({color: colors[4]})
+                        new THREE.MeshBasicMaterial({color: leslieDB.colors[0]}),
+                        new THREE.MeshBasicMaterial({color: leslieDB.colors[4]})
                     ]));
 
                     callback();
@@ -69,10 +79,16 @@ function Leslie(textureLoader, leslieDB, options) {
             },
 
             onClick: function (intersects) {
-                exports.selected = true;
+                if (exports.selected && intersects[0].faceIndex < 10) {
+                    removePaletteColor();
+                    addPaletteColor(exports.mesh.geometry.faces[intersects[0].faceIndex].color.getHexString());
+                } else {
+                    exports.selected = true;
+                }
             },
 
             onBlur: function () {
+                removePaletteColor();
                 exports.mesh.position.z = options.zMax;
                 exports.selected = false;
             }
