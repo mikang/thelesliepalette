@@ -1,25 +1,7 @@
 function Leslie(textureLoader, leslieDB, options) {
     var currentVelocity = Helpers.getRandomXYZ(options.velocity),
         currentRotation = Helpers.getRandomXYZ(options.rotation),
-        removePaletteColor = function () {
-            var selectedColorDiv = document.getElementById('selected-color')
-            if (selectedColorDiv) selectedColorDiv.remove();
-        },
-        addPaletteColor = function (colorString) {
-            var selectedColorDiv = document.createElement('div');
-            selectedColorDiv.innerHTML = '#' + colorString;
-            selectedColorDiv.id = 'selected-color';
-            selectedColorDiv.style.top = (window.innerHeight / 2) + 150 + 'px';
-            selectedColorDiv.style.left = (window.innerWidth / 2) + 'px';
-            document.body.appendChild(selectedColorDiv);
-        },
-        setSidePaletteColors = function (box) {
-            for (var i = 0; i < 20; i++) {
-                var colorIndex = Math.floor(i / 2) % 5;
-                if (i >= 10) colorIndex = 4 - colorIndex;
-                box.faces[i].color.set(new THREE.Color(leslieDB.colors[colorIndex]));
-            }
-        },
+        paletteColor = new PaletteColor(),
         rotate = function () {
             exports.mesh.rotation.x += currentRotation.x;
             exports.mesh.rotation.y += currentRotation.y;
@@ -51,10 +33,8 @@ function Leslie(textureLoader, leslieDB, options) {
 
             load: function (callback) {
                 textureLoader.load(leslieDB.name, function (leslieTexture) {
-                    var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5);
-
-                    var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
-                    setSidePaletteColors(box);
+                    var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5),
+                        sidePalette = paletteColor.load(box, leslieDB.colors);
 
                     exports.mesh = new THREE.Mesh(box, new THREE.MeshFaceMaterial([
                         sidePalette,
@@ -80,15 +60,17 @@ function Leslie(textureLoader, leslieDB, options) {
 
             onClick: function (intersects) {
                 if (exports.selected && intersects[0].faceIndex < 10) {
-                    removePaletteColor();
-                    addPaletteColor(exports.mesh.geometry.faces[intersects[0].faceIndex].color.getHexString());
+                    paletteColor.remove();
+                    paletteColor.add(
+                        exports.mesh.geometry.faces[intersects[0].faceIndex].color.getHexString(),
+                        exports.mesh.geometry.boundingSphere.radius + 10);
                 } else {
                     exports.selected = true;
                 }
             },
 
             onBlur: function () {
-                removePaletteColor();
+                paletteColor.remove();
                 exports.mesh.position.z = options.zMax;
                 exports.selected = false;
             }
