@@ -13,6 +13,7 @@ function Leslies(camera, options) {
         exports = {
             balls: [],
             leslies: {},
+            leslieMeshes: [],
             selectedId: false,
 
             onClick: function (event) {
@@ -21,8 +22,7 @@ function Leslies(camera, options) {
                 mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
                 raycaster.setFromCamera(mouse, camera);
 
-                var meshes = _.map(exports.leslies, 'mesh'),
-                  intersects = raycaster.intersectObjects(meshes);
+                var intersects = raycaster.intersectObjects(exports.leslieMeshes);
 
                 if (intersects.length > 0) {
                     if (exports.selectedId && exports.selectedId != intersects[0].object.id) {
@@ -39,24 +39,18 @@ function Leslies(camera, options) {
 
             load: function (scene) {
                 iterateLeslies(function (leslieDb) {
-                    var leslie = new Leslie(textureLoader, leslieDb, options),
-                      ball1 = new Ball(leslieDb.colors[0], options),
-                      ball2 = new Ball(leslieDb.colors[1], options);
+                    var ballLoad = function (ball) {
+                        scene.add(ball.mesh);
+                        exports.balls.push(ball);
+                    };
 
-                    leslie.load(function () {
+                    new Leslie(textureLoader, leslieDb, options).load(function (leslie) {
                         scene.add(leslie.mesh);
                         exports.leslies[leslie.mesh.id] = leslie;
+                        exports.leslieMeshes.push(leslie.mesh);
                     });
-
-                    ball1.load(function () {
-                        scene.add(ball1.mesh);
-                        exports.balls.push(ball1);
-                    });
-
-                    ball2.load(function () {
-                        scene.add(ball2.mesh);
-                        exports.balls.push(ball2);
-                    });
+                    new Ball(leslieDb.colors[0], options).load(ballLoad);
+                    new Ball(leslieDb.colors[1], options).load(ballLoad);
                 });
             },
 

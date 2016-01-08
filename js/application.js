@@ -1,23 +1,4 @@
 window.onload = function () {
-    function animate() {
-        requestAnimationFrame(animate);
-        leslies.animate();
-        renderer.render(scene, camera);
-    }
-
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    function onDocumentTouchStart(event) {
-        event.preventDefault();
-        event.clientX = event.touches[0].clientX;
-        event.clientY = event.touches[0].clientY;
-        onDocumentMouseDown(event);
-    }
-
     var options = {
             rotation: 0.005,
             velocity: 3,
@@ -31,7 +12,23 @@ window.onload = function () {
         leslies = new Leslies(camera, options),
         lights = new Lights(),
         canvas = document.createElement('canvas'),
-        container = document.getElementById('container');
+        container = document.getElementById('container'),
+        animate = function () {
+            requestAnimationFrame(animate);
+            leslies.animate();
+            renderer.render(scene, camera);
+        },
+        onWindowResize = function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        },
+        onDocumentTouchStart = function (event) {
+            event.preventDefault();
+            event.clientX = event.touches[0].clientX;
+            event.clientY = event.touches[0].clientY;
+            onDocumentMouseDown(event);
+        };
 
     camera.position.z = 750;
 

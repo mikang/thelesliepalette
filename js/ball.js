@@ -11,7 +11,7 @@ function Ball(color, options) {
                 var sphere = new THREE.SphereGeometry(32, 32, 32);
                 var mesh = new THREE.MeshLambertMaterial( {color: color, vertexColors: THREE.FaceColors} );
                 exports.mesh = new THREE.Mesh(sphere, mesh);
-                callback();
+                callback(exports);
             }
         };
 

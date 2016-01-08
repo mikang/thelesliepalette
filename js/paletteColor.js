@@ -16,7 +16,7 @@ function PaletteColor() {
 
     return {
         load: function (box, colors) {
-            var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors})
+            var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
             for (var i = 0; i < 20; i++) {
                 var colorIndex = Math.floor(i / 2) % 5;
                 if (i >= 10) colorIndex = 4 - colorIndex;

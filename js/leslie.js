@@ -35,7 +35,6 @@ function Leslie(textureLoader, leslieDB, options) {
                 textureLoader.load(leslieDB.name, function (leslieTexture) {
                     var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5),
                         sidePalette = paletteColor.load(box, leslieDB.colors);
-
                     exports.mesh = new THREE.Mesh(box, new THREE.MeshFaceMaterial([
                         sidePalette,
                         sidePalette,
@@ -44,8 +43,7 @@ function Leslie(textureLoader, leslieDB, options) {
                         new THREE.MeshBasicMaterial({color: leslieDB.colors[0]}),
                         new THREE.MeshBasicMaterial({color: leslieDB.colors[4]})
                     ]));
-
-                    callback();
+                    callback(exports);
                 });
             },
 
