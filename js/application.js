@@ -13,16 +13,21 @@ window.onload = function () {
 
     function onDocumentTouchStart(event) {
         event.preventDefault();
-
         event.clientX = event.touches[0].clientX;
         event.clientY = event.touches[0].clientY;
         onDocumentMouseDown(event);
     }
 
-    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000),
+    var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000),
         scene = new THREE.Scene(),
         renderer = new THREE.WebGLRenderer(),
-        leslies = new Leslies(camera),
+        leslies = new Leslies(camera, {
+            rotation: 0.005,
+            velocity: 3,
+            zMax: 100,
+            toFrontIter: 10,
+            toFrontX: 4,
+        }),
         lights = new Lights(),
         canvas = document.createElement('canvas'),
         container = document.getElementById('container');
