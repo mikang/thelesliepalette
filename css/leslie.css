@@ -4,3 +4,9 @@
     font-weight: 700;
     font-size: 20px;
 }
+
+.title {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
