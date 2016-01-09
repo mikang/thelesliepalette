@@ -44,8 +44,7 @@ function Leslies(camera, options) {
                         exports.balls.push(ball);
                     };
 
-                    new Leslie(textureLoader, leslieDb, options).load(function (leslie) {
-                        scene.add(leslie.mesh);
+                    new Leslie(textureLoader, leslieDb, options).load(scene, function (leslie) {
                         exports.leslies[leslie.mesh.id] = leslie;
                         exports.leslieMeshes.push(leslie.mesh);
                     });

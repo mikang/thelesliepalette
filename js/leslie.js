@@ -1,7 +1,7 @@
 function Leslie(textureLoader, leslieDB, options) {
     var currentVelocity = Helpers.getRandomXYZ(options.velocity),
         currentRotation = Helpers.getRandomXYZ(options.rotation),
-        paletteColor = new PaletteColor(),
+        colorPalette = new ColorPalette(options),
         rotate = function () {
             _.each(['x', 'y', 'z'], function (dimension) {
                 exports.mesh.rotation[dimension] += currentRotation[dimension];
@@ -17,7 +17,7 @@ function Leslie(textureLoader, leslieDB, options) {
         flyToFront = function () {
             var final = {
               position: { x: 0, y: 0, z: options.zMax * options.toFrontX },
-              rotation: { x: 1.5, y: 0, z: 0.6 }
+              rotation: { x: Math.PI / 2, y: 0, z: Math.PI / 5 }
             };
 
             _.each(['position', 'rotation'], function (transform) {
@@ -32,10 +32,10 @@ function Leslie(textureLoader, leslieDB, options) {
             mesh: null,
             selected: false,
 
-            load: function (callback) {
+            load: function (scene, callback) {
                 textureLoader.load(leslieDB.name, function (leslieTexture) {
                     var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5),
-                        sidePalette = paletteColor.load(box, leslieDB.colors);
+                        sidePalette = colorPalette.createColors(box, leslieDB.colors);
                     exports.mesh = new THREE.Mesh(box, new THREE.MeshFaceMaterial([
                         sidePalette,
                         sidePalette,
@@ -44,6 +44,11 @@ function Leslie(textureLoader, leslieDB, options) {
                         new THREE.MeshBasicMaterial({color: leslieDB.colors[0]}),
                         new THREE.MeshBasicMaterial({color: leslieDB.colors[4]})
                     ]));
+                    colorPalette.createDrawers(box, function(drawer) {
+                        exports.mesh.add(drawer);
+                        drawer.visible = false;
+                    });
+                    scene.add(exports.mesh);
                     callback(exports);
                 });
             },
@@ -59,17 +64,14 @@ function Leslie(textureLoader, leslieDB, options) {
 
             onClick: function (intersects) {
                 if (exports.selected && intersects[0].faceIndex < 10) {
-                    paletteColor.remove();
-                    paletteColor.add(
-                        exports.mesh.geometry.faces[intersects[0].faceIndex].color.getHexString(),
-                        exports.mesh.geometry.boundingSphere.radius + 10);
+                    colorPalette.onClick(intersects[0].faceIndex);
                 } else {
                     exports.selected = true;
                 }
             },
 
             onBlur: function () {
-                paletteColor.remove();
+                colorPalette.onBlur();
                 exports.mesh.position.z = options.zMax;
                 exports.selected = false;
             }
