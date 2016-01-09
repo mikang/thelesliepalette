@@ -1,24 +1,19 @@
 function Lights() {
     return {
         load: function (scene, camera) {
-            var ambientLight = new THREE.AmbientLight(0x000000);
-            scene.add(ambientLight);
+            var whiteLight = 0xffffff;
             var lights = [
-                new THREE.PointLight(0xffffff, 1, 0),
-                new THREE.PointLight(0xffffff, 0.5, 0),
-                new THREE.PointLight(0xffffff, 0.5, 0),
-                new THREE.PointLight(0xffffff, 0.5, 0)
+                new THREE.SpotLight(whiteLight, 1, 0),
+                new THREE.PointLight(whiteLight, 0.5, 0),
+                new THREE.HemisphereLight(whiteLight, 0x080820, 0.5)
             ];
 
-            lights[0].position.set(0, 0, 750);
-            lights[1].position.set(500, 1000, 100);
-            lights[2].position.set(-500, 1000, 100);
-            lights[3].position.set(0, -1000, 100);
+            lights[0].position.set(0, 0, 800);
+            lights[1].position.set(0, 0, 0);
 
-            scene.add(lights[0]);
-            scene.add(lights[1]);
-            scene.add(lights[2]);
-            scene.add(lights[3]);
+            _.each(lights, function (light) {
+                scene.add(light);
+            });
         }
     };
 }

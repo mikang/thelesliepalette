@@ -3,9 +3,10 @@ function Leslie(textureLoader, leslieDB, options) {
         currentRotation = Helpers.getRandomXYZ(options.rotation),
         paletteColor = new PaletteColor(),
         rotate = function () {
-            exports.mesh.rotation.x += currentRotation.x;
-            exports.mesh.rotation.y += currentRotation.y;
-            exports.mesh.rotation.z += currentRotation.z;
+            _.each(['x', 'y', 'z'], function (dimension) {
+                exports.mesh.rotation[dimension] += currentRotation[dimension];
+                if (Math.abs(exports.mesh.rotation[dimension]) > 2 * Math.PI) exports.mesh.rotation[dimension] = 0;
+            });
         },
         flipAndCloneTexture = function (texture) {
             var upsideTexture = texture.clone();

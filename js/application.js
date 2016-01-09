@@ -2,9 +2,9 @@ window.onload = function () {
     var options = {
             rotation: 0.005,
             velocity: 3,
-            zMax: 100,
+            zMax: 200,
             toFrontIter: 10,
-            toFrontX: 4
+            toFrontX: 2
         },
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000),
         scene = new THREE.Scene(),
