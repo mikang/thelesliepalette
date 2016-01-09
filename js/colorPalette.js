@@ -18,18 +18,20 @@ function ColorPalette(options) {
         createColorHexMaterial = function (color) {
             var canvas = document.createElement("canvas"),
                 context = canvas.getContext("2d"),
-                colorComplement = new THREE.Color('#' + ('000000' + (('0xffffff' ^ '0x' + color.getHexString()).toString(16))).slice(-6)),
                 texture = new THREE.Texture(canvas);
 
             canvas.width = 128;
             canvas.height = 64;
+
             context.fillStyle = color.getStyle();
             context.fillRect(0, 0, canvas.width, canvas.height);
+
             context.textAlign = "center";
             context.textBaseline = "middle";
             context.font = "22pt 'Oswald', sans-serif";
-            context.fillStyle = colorComplement.getStyle();
+            context.fillStyle = '#' + ('000000' + (0xffffff ^ color.getHex())).toString(16).slice(-6);
             context.fillText('#' + color.getHexString(), canvas.width / 2, canvas.height / 2);
+
             texture.needsUpdate = true;
             return new THREE.MeshBasicMaterial({map : texture});
         },
