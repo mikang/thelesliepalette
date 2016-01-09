@@ -75,8 +75,10 @@ function ColorPalette(options) {
             },
 
             onBlur: function () {
-                exports.openDrawer.visible = false;
-                exports.openDrawer = null;
+                if (exports.openDrawer) {
+                    exports.openDrawer.visible = false;
+                    exports.openDrawer = null;
+                }
             },
 
             onClick: function (faceIndex) {
