@@ -1,8 +1,9 @@
 function Leslie(textureLoader, camera, leslieDB, options) {
-    var currentVelocity = Helpers.getRandomXYZ(options.velocity),
-        currentRotation = Helpers.getRandomXYZ(options.rotation),
+    var currentVelocity = Helpers.getRandomVector3(options.velocity),
+        currentRotation = Helpers.getRandomVector3(options.rotation),
         colorPalette = new ColorPalette(options),
         rotate = function () {
+            // Use http://threejs.org/docs/#Reference/Math/Quaternion here
             _.each(['x', 'y', 'z'], function (dimension) {
                 exports.mesh.rotation[dimension] += currentRotation[dimension];
                 if (Math.abs(exports.mesh.rotation[dimension]) > 2 * Math.PI) exports.mesh.rotation[dimension] = 0;
@@ -15,11 +16,13 @@ function Leslie(textureLoader, camera, leslieDB, options) {
             return upsideTexture;
         },
         flyToFront = function () {
+            // Use http://threejs.org/docs/#Reference/Math/Quaternion here
             var final = {
-                  position: new THREE.Vector3( -50, 0, options.zMax * 2 ),
-                  rotation: new THREE.Vector3( Math.PI / 2, 0, Math.PI / 5 )
-              },
-              angle = final.rotation.angleTo( exports.mesh.position ); // Figure out how to use the angle here
+                    position: new THREE.Vector3( -50, 0, options.zMax * 2.2 ),
+                    rotation: new THREE.Vector3( Math.PI / 2, 0, Math.PI / 5 )
+                };
+            // angle = camera.angleTo( exports.mesh.position ),
+            // exports.mesh.lookAt(final.rotation);
             final.position.applyQuaternion( camera.quaternion );
             final.rotation.applyQuaternion( camera.quaternion );
 

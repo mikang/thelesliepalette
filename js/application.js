@@ -20,17 +20,17 @@ window.onload = function() {
 
 function onControlsSubmit() {
     var newOptions = {
-        rotation: Number(document.getElementById('rotation').value),
-        velocity: Number(document.getElementById('velocity').value),
-        zMax: Number(document.getElementById('z-max').value),
-        numberOfBallsPerLeslie: Number(document.getElementById('number-of-balls-per-leslie').value),
-        ballSizeRange: Number(document.getElementById('ball-size-range').value),
-        toFrontIter: Number(document.getElementById('to-front-iter').value),
-        maxLeslies: Number(document.getElementById('max-leslies').value),
-        seaEnabled: document.getElementById('sea-enabled').checked,
-        seaDistoration: Number(document.getElementById('sea-distoration').value),
-        seaColor: document.getElementById('sea-color').value,
-        seaSunColor: document.getElementById('sea-sun-color').value,
+        rotation: Number(document.controls.rotation.value),
+        velocity: Number(document.controls.velocity.value),
+        zMax: Number(document.controls.zMax.value),
+        numberOfBallsPerLeslie: Number(document.controls.numberOfBallsPerLeslie.value),
+        ballSizeRange: Number(document.controls.ballSizeRange.value),
+        toFrontIter: Number(document.controls.toFrontIter.value),
+        maxLeslies: Number(document.controls.maxLeslies.value),
+        seaEnabled: document.controls.seaEnabled.checked,
+        seaDistoration: Number(document.controls.seaDistoration.value),
+        seaColor: document.controls.seaColor.value,
+        seaSunColor: document.controls.seaSunColor.value,
     };
     console.log(newOptions);
 

@@ -3,8 +3,8 @@ function LeslieAnimation() {
         canvas = document.createElement('canvas'),
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 10000),
         scene = new THREE.Scene(),
-        renderer = new THREE.WebGLRenderer(),
-        controls = new THREE.OrbitControls( camera, renderer.domElement );
+        renderer = new THREE.WebGLRenderer({ antialias: true }),
+        controls = new THREE.OrbitControls( camera, renderer.domElement ),
         lights = new Lights(),
         leslies = new Leslies(camera),
         sea = new Sea(),
