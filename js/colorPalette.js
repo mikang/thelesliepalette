@@ -38,6 +38,8 @@ function ColorPalette(options) {
         exports = {
             drawers: [],
             final: {},
+            openDrawer: null,
+            closeDrawer: null,
 
             createColors: function (box, colors) {
                 var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
@@ -66,20 +68,24 @@ function ColorPalette(options) {
                             material, material, material
                         ]));
 
-                    mesh.position.set(
-                        (leslieWidth / 2) + (colorDrawer.parameters.width / 2),
-                        0,
-                        depth * (Math.floor(faceIndex / 2) - 2) * -1);
-
+                    mesh.position.set(0, -1, depth * (Math.floor(faceIndex / 2) - 2) * -1);
+                    exports.final = {x: (leslieWidth / 2) + (colorDrawer.parameters.width / 2)};
                     exports.drawers.push(mesh);
                     callback(mesh);
                 }
             },
 
-            onBlur: function () {
-                if (exports.openDrawer) {
-                    exports.openDrawer.visible = false;
-                    exports.openDrawer = null;
+            animate: function () {
+                if (exports.openDrawer && exports.openDrawer.position.x < exports.final.x) {
+                    exports.openDrawer.position.x += (exports.final.x - exports.openDrawer.position.x) / options.toFrontIter;
+                }
+                if (exports.closeDrawer) {
+                    exports.closeDrawer.position.x += (0 - exports.closeDrawer.position.x) / options.toFrontIter;
+                    if (exports.closeDrawer.position.x < 0) {
+                        exports.closeDrawer.position.x = 0;
+                        exports.closeDrawer.visible = false;
+                        exports.closeDrawer = null;
+                    }
                 }
             },
 
@@ -88,6 +94,13 @@ function ColorPalette(options) {
                 exports.openDrawer = exports.drawers[Math.floor(faceIndex / 2)];
                 exports.openDrawer.visible = true;
                 copyText(exports.openDrawer.material.materials[0].color.getHexString());
+            },
+
+            onBlur: function () {
+                if (exports.openDrawer) {
+                    exports.closeDrawer = exports.openDrawer;
+                    exports.openDrawer = null;
+                }
             }
         };
 

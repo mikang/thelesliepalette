@@ -8,8 +8,9 @@ function Ball(color, options) {
             },
 
             load: function (callback) {
-                var sphere = new THREE.SphereGeometry(32, 32, 32);
-                var mesh = new THREE.MeshPhongMaterial( {color: color, vertexColors: THREE.FaceColors} );
+                var radius = Math.floor(Math.random() * 15) + 25,
+                    sphere = new THREE.SphereGeometry(radius, 16, 16),
+                    mesh = new THREE.MeshPhongMaterial( {color: color, vertexColors: THREE.FaceColors} );
                 exports.mesh = new THREE.Mesh(sphere, mesh);
                 callback(exports);
             }

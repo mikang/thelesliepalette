@@ -16,7 +16,7 @@ function Leslie(textureLoader, leslieDB, options) {
         },
         flyToFront = function () {
             var final = {
-              position: { x: -50, y: 0, z: options.zMax * options.toFrontX },
+              position: { x: -50, y: 0, z: options.zMax * 2 },
               rotation: { x: Math.PI / 2, y: 0, z: Math.PI / 5 }
             };
 
@@ -53,6 +53,7 @@ function Leslie(textureLoader, leslieDB, options) {
             },
 
             animate: function () {
+                colorPalette.animate();
                 if (exports.selected) {
                     flyToFront();
                 } else {

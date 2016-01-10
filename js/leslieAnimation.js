@@ -26,7 +26,7 @@ function LeslieAnimation() {
             leslies.onClick(event);
         };
 
-    camera.position.z = 750;
+    camera.position.z = 800;
     renderer.setClearColor(0xf0f0f0);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
