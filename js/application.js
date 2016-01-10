@@ -4,7 +4,11 @@ window.onload = function () {
             velocity: 3,
             zMax: 200,
             toFrontIter: 10,
-            toFrontX: 2
+            toFrontX: 2,
+            maxLeslies: null,
+            seaDistoration: 25.0,
+            seaColor: 0x001e0f,
+            seaSunColor: 0xA7A3F0,
         },
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 10000),
         scene = new THREE.Scene(),
@@ -41,7 +45,7 @@ window.onload = function () {
     canvas.height = window.innerHeight;
 
     lights.load(scene, camera);
-    sea.load(renderer, camera, scene, lights.lights[0]);
+    sea.load(renderer, camera, scene, lights.lights[0], options);
     leslies.load(scene);
 
     window.addEventListener('resize', onWindowResize, false);

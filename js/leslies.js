@@ -5,7 +5,11 @@ function Leslies(camera, options) {
         iterateLeslies = function (callback) {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4) _.each(JSON.parse(xmlhttp.responseText), callback);
+                if (xmlhttp.readyState == 4) {
+                    var lesliesDB = JSON.parse(xmlhttp.responseText);
+                    if (options.maxLeslies) lesliesDB = _.sample(lesliesDB, options.maxLeslies);
+                    _.each(lesliesDB, callback);
+                }
             };
             xmlhttp.open('GET', 'leslies/db.json', true);
             xmlhttp.send();
@@ -40,16 +44,18 @@ function Leslies(camera, options) {
             load: function (scene) {
                 iterateLeslies(function (leslieDb) {
                     var ballLoad = function (ball) {
-                        scene.add(ball.mesh);
-                        exports.balls.push(ball);
-                    };
+                            scene.add(ball.mesh);
+                            exports.balls.push(ball);
+                        },
+                        ballColors = _.sample(leslieDb.colors, 2);
 
                     new Leslie(textureLoader, leslieDb, options).load(scene, function (leslie) {
                         exports.leslies[leslie.mesh.id] = leslie;
                         exports.leslieMeshes.push(leslie.mesh);
                     });
-                    new Ball(leslieDb.colors[0], options).load(ballLoad);
-                    new Ball(leslieDb.colors[1], options).load(ballLoad);
+
+                    new Ball(ballColors[0], options).load(ballLoad);
+                    new Ball(ballColors[1], options).load(ballLoad);
                 });
             },
 
