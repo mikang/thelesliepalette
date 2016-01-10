@@ -20,9 +20,8 @@ function Sea() {
         			exports.water.material
         		);
         		waterMirror.add(exports.water);
-        		waterMirror.rotation.x = -Math.PI / 2;
-                waterMirror.position.y = -750;
-
+                waterMirror.rotation.x = -Math.PI / 6;
+                waterMirror.position.z = -1000;
         		scene.add(waterMirror);
             });
         },

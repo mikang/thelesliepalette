@@ -6,7 +6,7 @@ window.onload = function () {
             toFrontIter: 10,
             toFrontX: 2
         },
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000),
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 10000),
         scene = new THREE.Scene(),
         renderer = new THREE.WebGLRenderer(),
         leslies = new Leslies(camera, options),
