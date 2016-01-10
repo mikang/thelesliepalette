@@ -1,4 +1,4 @@
-function Leslie(textureLoader, leslieDB, options) {
+function Leslie(textureLoader, camera, leslieDB, options) {
     var currentVelocity = Helpers.getRandomXYZ(options.velocity),
         currentRotation = Helpers.getRandomXYZ(options.rotation),
         colorPalette = new ColorPalette(options),
@@ -16,9 +16,12 @@ function Leslie(textureLoader, leslieDB, options) {
         },
         flyToFront = function () {
             var final = {
-              position: { x: -50, y: 0, z: options.zMax * 2 },
-              rotation: { x: Math.PI / 2, y: 0, z: Math.PI / 5 }
-            };
+                  position: new THREE.Vector3( -50, 0, options.zMax * 2 ),
+                  rotation: new THREE.Vector3( Math.PI / 2, 0, Math.PI / 5 )
+              },
+              angle = final.rotation.angleTo( exports.mesh.position ); // Figure out how to use the angle here
+            final.position.applyQuaternion( camera.quaternion );
+            final.rotation.applyQuaternion( camera.quaternion );
 
             _.each(['position', 'rotation'], function (transform) {
                 _.each(['x', 'y', 'z'], function (dimension) {
@@ -72,7 +75,7 @@ function Leslie(textureLoader, leslieDB, options) {
 
             onBlur: function () {
                 colorPalette.onBlur();
-                exports.mesh.position.z = options.zMax;
+                exports.mesh.position.z -= 100;
                 exports.selected = false;
             }
         };

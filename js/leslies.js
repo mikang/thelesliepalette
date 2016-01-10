@@ -44,7 +44,7 @@ function Leslies(camera) {
                 iterateLeslies(options, function (leslieDb) {
                     var ballColors = _.sample(leslieDb.colors, options.numberOfBallsPerLeslie);
 
-                    new Leslie(textureLoader, leslieDb, options).load(function (leslie) {
+                    new Leslie(textureLoader, camera, leslieDb, options).load(function (leslie) {
                         exports.leslies[leslie.mesh.id] = leslie;
                         exports.leslieMeshes.push(leslie.mesh);
                         scene.add(leslie.mesh);
