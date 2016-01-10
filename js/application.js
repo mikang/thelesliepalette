@@ -25,7 +25,7 @@ function onControlsSubmit() {
         numberOfBallsPerLeslie: document.getElementById('number-of-balls-per-leslie').value,
         toFrontIter: document.getElementById('to-front-iter').value,
         toFrontX: document.getElementById('to-front-x').value,
-        maxLeslies: null,
+        maxLeslies: document.getElementById('max-leslies').value,
         seaDistoration: document.getElementById('sea-distoration').value,
         seaColor: document.getElementById('sea-color').value,
         seaSunColor: document.getElementById('sea-sun-color').value,
