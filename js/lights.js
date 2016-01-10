@@ -1,19 +1,21 @@
 function Lights() {
-    return {
+    var exports = {
+        lights: null,
+
         load: function (scene, camera) {
-            var whiteLight = 0xffffff;
-            var lights = [
-                new THREE.SpotLight(whiteLight, 1, 0),
-                new THREE.PointLight(whiteLight, 0.5, 0),
-                new THREE.HemisphereLight(whiteLight, 0x080820, 0.5)
+            exports.lights = [
+                new THREE.DirectionalLight(0xffffff, 1),
+                new THREE.AmbientLight(0x404040, 0.5)
             ];
 
-            lights[0].position.set(0, 0, 800);
-            lights[1].position.set(0, 0, 0);
+            exports.lights[0].position.set(0, 750, 750);
+            exports.lights[0].castShadow = true;
 
-            _.each(lights, function (light) {
+            _.each(exports.lights, function (light) {
                 scene.add(light);
             });
         }
     };
+
+    return exports;
 }

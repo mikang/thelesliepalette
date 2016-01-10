@@ -11,11 +11,13 @@ window.onload = function () {
         renderer = new THREE.WebGLRenderer(),
         leslies = new Leslies(camera, options),
         lights = new Lights(),
+        sea = new Sea(),
         container = document.getElementById('container'),
         canvas = document.createElement('canvas'),
         animate = function () {
             requestAnimationFrame(animate);
             leslies.animate();
+            sea.animate();
             renderer.render(scene, camera);
         },
         onWindowResize = function () {
@@ -38,8 +40,9 @@ window.onload = function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    leslies.load(scene);
     lights.load(scene, camera);
+    sea.load(renderer, camera, scene, lights.lights[0]);
+    leslies.load(scene);
 
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener('mousedown', leslies.onClick, false);
