@@ -39,7 +39,7 @@ function ColorPalette(options) {
             drawers: [],
             final: {},
             openDrawer: null,
-            closeDrawer: null,
+            closeDrawers: [],
 
             createColors: function (box, colors) {
                 var sidePalette = new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors});
@@ -60,7 +60,7 @@ function ColorPalette(options) {
                 for (var j = 0; j < 5; j++) {
                     var faceIndex = j * 2,
                         color = box.faces[faceIndex].color,
-                        colorDrawer = new THREE.BoxGeometry(depth * 1.8, leslieHeight, depth), // w = 102.4, h = 32, d = 51.2
+                        colorDrawer = new THREE.BoxGeometry(depth * 1.8, leslieHeight - 3, depth), // w to fit text, height to fit inside leslie
                         material = new THREE.MeshBasicMaterial({color: color.getHex()}),
                         mesh = new THREE.Mesh(colorDrawer, new THREE.MeshFaceMaterial([
                             material, material,
@@ -79,13 +79,16 @@ function ColorPalette(options) {
                 if (exports.openDrawer && exports.openDrawer.position.x < exports.final.x) {
                     exports.openDrawer.position.x += (exports.final.x - exports.openDrawer.position.x) / options.toFrontIter;
                 }
-                if (exports.closeDrawer) {
-                    exports.closeDrawer.position.x += (0 - exports.closeDrawer.position.x) / options.toFrontIter;
-                    if (exports.closeDrawer.position.x < 0) {
-                        exports.closeDrawer.position.x = 0;
-                        exports.closeDrawer.visible = false;
-                        exports.closeDrawer = null;
-                    }
+                if (exports.closeDrawers.length > 0) {
+                    exports.closeDrawers = _.chain(exports.closeDrawers).map(function (closeDrawer) {
+                        closeDrawer.position.x += (-1 - closeDrawer.position.x) / options.toFrontIter;
+                        if (closeDrawer.position.x <= 0) {
+                            closeDrawer.position.x = 0;
+                            closeDrawer.visible = false;
+                            return null;
+                        }
+                        return closeDrawer;
+                    }).compact().value();
                 }
             },
 
@@ -98,7 +101,7 @@ function ColorPalette(options) {
 
             onBlur: function () {
                 if (exports.openDrawer) {
-                    exports.closeDrawer = exports.openDrawer;
+                    exports.closeDrawers.push(exports.openDrawer);
                     exports.openDrawer = null;
                 }
             }
