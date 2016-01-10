@@ -19,14 +19,14 @@ window.onload = function() {
 
 function onControlsSubmit() {
     var newOptions = {
-        rotation: document.getElementById('rotation').value,
-        velocity: document.getElementById('velocity').value,
-        zMax: document.getElementById('z-max').value,
-        numberOfBallsPerLeslie: document.getElementById('number-of-balls-per-leslie').value,
-        toFrontIter: document.getElementById('to-front-iter').value,
-        toFrontX: document.getElementById('to-front-x').value,
-        maxLeslies: document.getElementById('max-leslies').value,
-        seaDistoration: document.getElementById('sea-distoration').value,
+        rotation: Number(document.getElementById('rotation').value),
+        velocity: Number(document.getElementById('velocity').value),
+        zMax: Number(document.getElementById('z-max').value),
+        numberOfBallsPerLeslie: Number(document.getElementById('number-of-balls-per-leslie').value),
+        toFrontIter: Number(document.getElementById('to-front-iter').value),
+        toFrontX: Number(document.getElementById('to-front-x').value),
+        maxLeslies: Number(document.getElementById('max-leslies').value),
+        seaDistoration: Number(document.getElementById('sea-distoration').value),
         seaColor: document.getElementById('sea-color').value,
         seaSunColor: document.getElementById('sea-sun-color').value,
     };
