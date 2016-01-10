@@ -1,56 +1,45 @@
-window.onload = function () {
+var leslieAnimation = null;
+
+window.onload = function() {
     var options = {
             rotation: 0.005,
             velocity: 3,
             zMax: 200,
+            numberOfBallsPerLeslie: 2,
             toFrontIter: 10,
             toFrontX: 2,
             maxLeslies: null,
             seaDistoration: 25.0,
             seaColor: 0x001e0f,
-            seaSunColor: 0xA7A3F0,
-        },
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 10000),
-        scene = new THREE.Scene(),
-        renderer = new THREE.WebGLRenderer(),
-        leslies = new Leslies(camera, options),
-        lights = new Lights(),
-        sea = new Sea(),
-        container = document.getElementById('container'),
-        canvas = document.createElement('canvas'),
-        animate = function () {
-            requestAnimationFrame(animate);
-            leslies.animate();
-            sea.animate();
-            renderer.render(scene, camera);
-        },
-        onWindowResize = function () {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        },
-        onDocumentTouchStart = function (event) {
-            event.preventDefault();
-            event.clientX = event.touches[0].clientX;
-            event.clientY = event.touches[0].clientY;
-            leslies.onClick(event);
+            seaSunColor: 0xA7A3F0
         };
-
-    camera.position.z = 750;
-    renderer.setClearColor(0xf0f0f0);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    container.appendChild(renderer.domElement);
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    lights.load(scene, camera);
-    sea.load(renderer, camera, scene, lights.lights[0], options);
-    leslies.load(scene);
-
-    window.addEventListener('resize', onWindowResize, false);
-    document.addEventListener('mousedown', leslies.onClick, false);
-    document.addEventListener('touchstart', onDocumentTouchStart, false);
-
-    animate();
+    leslieAnimation = new LeslieAnimation();
+    leslieAnimation.load(options);
 };
+
+function onControlsSubmit() {
+    var newOptions = {
+        rotation: document.getElementById('rotation').value,
+        velocity: document.getElementById('velocity').value,
+        zMax: document.getElementById('z-max').value,
+        numberOfBallsPerLeslie: document.getElementById('number-of-balls-per-leslie').value,
+        toFrontIter: document.getElementById('to-front-iter').value,
+        toFrontX: document.getElementById('to-front-x').value,
+        maxLeslies: null,
+        seaDistoration: document.getElementById('sea-distoration').value,
+        seaColor: document.getElementById('sea-color').value,
+        seaSunColor: document.getElementById('sea-sun-color').value,
+    };
+    console.log(newOptions);
+
+    leslieAnimation.remove();
+    leslieAnimation.load(newOptions);
+    toggleControls();
+
+    return false;
+}
+
+function toggleControls() {
+    var controls = document.getElementById("controls");
+    controls.className = (controls.className === "open") ? "" : "open";
+}

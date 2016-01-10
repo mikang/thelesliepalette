@@ -1,8 +1,8 @@
-function Leslies(camera, options) {
+function Leslies(camera) {
     var raycaster = new THREE.Raycaster(),
         mouse = new THREE.Vector2(),
         textureLoader = new THREE.TextureLoader(),
-        iterateLeslies = function (callback) {
+        iterateLeslies = function (options, callback) {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState == 4) {
@@ -21,7 +21,6 @@ function Leslies(camera, options) {
             selectedId: false,
 
             onClick: function (event) {
-                event.preventDefault();
                 mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
                 mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
                 raycaster.setFromCamera(mouse, camera);
@@ -41,22 +40,33 @@ function Leslies(camera, options) {
                 }
             },
 
-            load: function (scene) {
-                iterateLeslies(function (leslieDb) {
-                    var ballLoad = function (ball) {
-                            scene.add(ball.mesh);
-                            exports.balls.push(ball);
-                        },
-                        ballColors = _.sample(leslieDb.colors, 2);
+            load: function (scene, options) {
+                iterateLeslies(options, function (leslieDb) {
+                    var ballColors = _.sample(leslieDb.colors, options.numberOfBallsPerLeslie);
 
-                    new Leslie(textureLoader, leslieDb, options).load(scene, function (leslie) {
+                    new Leslie(textureLoader, leslieDb, options).load(function (leslie) {
                         exports.leslies[leslie.mesh.id] = leslie;
                         exports.leslieMeshes.push(leslie.mesh);
+                        scene.add(leslie.mesh);
                     });
 
-                    new Ball(ballColors[0], options).load(ballLoad);
-                    new Ball(ballColors[1], options).load(ballLoad);
+                    _.each(ballColors, function (ballColor) {
+                        new Ball(ballColor, options).load(function (ball) {
+                                scene.add(ball.mesh);
+                                exports.balls.push(ball);
+                            });
+                    });
                 });
+            },
+
+            unload: function (scene) {
+                var removeFromScene = function (item) { scene.remove(item.mesh); };
+                _.each(exports.leslies, removeFromScene);
+                _.each(exports.balls, removeFromScene);
+                exports.leslies = {};
+                exports.balls = [];
+                exports.leslieMeshes = [];
+                exports.selectedId = false;
             },
 
             animate: function () {

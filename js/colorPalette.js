@@ -58,7 +58,7 @@ function ColorPalette(options) {
                 for (var j = 0; j < 5; j++) {
                     var faceIndex = j * 2,
                         color = box.faces[faceIndex].color,
-                        colorDrawer = new THREE.BoxGeometry(depth * 2, leslieHeight, depth), // w = 102.4, h = 32, d = 51.2
+                        colorDrawer = new THREE.BoxGeometry(depth * 1.8, leslieHeight, depth), // w = 102.4, h = 32, d = 51.2
                         material = new THREE.MeshBasicMaterial({color: color.getHex()}),
                         mesh = new THREE.Mesh(colorDrawer, new THREE.MeshFaceMaterial([
                             material, material,
@@ -67,7 +67,7 @@ function ColorPalette(options) {
                         ]));
 
                     mesh.position.set(
-                        (leslieWidth / 2) + depth,
+                        (leslieWidth / 2) + (colorDrawer.parameters.width / 2),
                         0,
                         depth * (Math.floor(faceIndex / 2) - 2) * -1);
 

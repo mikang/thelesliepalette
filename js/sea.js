@@ -1,6 +1,7 @@
 function Sea() {
     var exports = {
         water: null,
+        waterMirror: null,
 
         load: function (renderer, camera, scene, light, options) {
             new THREE.TextureLoader().load('images/water.jpg', function (waterTexture) {
@@ -15,15 +16,21 @@ function Sea() {
         			waterColor: options.seaColor,
         			distortionScale: options.seaDistoration
         		});
-        		var waterMirror = new THREE.Mesh(
+        		exports.waterMirror = new THREE.Mesh(
         			new THREE.PlaneBufferGeometry(window.innerWidth * 500, window.innerHeight * 500, 10, 10),
         			exports.water.material
         		);
-        		waterMirror.add(exports.water);
-                waterMirror.rotation.x = -Math.PI / 8;
-                waterMirror.position.z = -options.zMax * 3;
-        		scene.add(waterMirror);
+        		exports.waterMirror.add(exports.water);
+                exports.waterMirror.rotation.x = -Math.PI / 8;
+                exports.waterMirror.position.z = -options.zMax * 3;
+        		scene.add(exports.waterMirror);
             });
+        },
+
+        unload: function(scene) {
+            scene.remove(exports.waterMirror);
+            exports.waterMirror = null;
+            exports.water = null;
         },
 
         animate: function () {

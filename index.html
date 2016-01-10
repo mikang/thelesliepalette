@@ -22,12 +22,53 @@
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<div id="title">The Leslie Palette</div>
-
-<div id="container">
+<div id="title">
+    The Leslie Palette
+    <button id="controls-toggle" onclick="toggleControls()">&#9881;</button>
 </div>
 
+<form name="controls" id="controls" onsubmit="return onControlsSubmit()">
+    <label for="rotation">
+        Rotation
+        <input type="range" id="rotation" name="rotation" min="0.005" max="0.5" step="0.005" value="0.005">
+    </label>
+    <label for="velocity">
+        Velocity
+        <input type="range" id="velocity" name="velocity" min="0.5" max="100" step="0.5" value="3">
+    </label>
+    <label for="zMax">
+        Z Max
+        <input type="range" id="z-max" name="zMax" min="10" max="300" step="10" value="200">
+    </label>
+    <label for="numberOfBallsPerLeslie">
+        Number of Balls per Leslie
+        <input type="range" id="number-of-balls-per-leslie" name="numberOfBallsPerLeslie" min="1" max="5" value="2">
+    </label>
+    <label for="toFrontIter">
+        To Front Iterations
+        <input type="range" id="to-front-iter" name="toFrontIter" min="1" max="20" value="10">
+    </label>
+    <label for="toFrontX">
+        To Front Multiplier from zMax
+        <input type="range" id="to-front-x" name="toFrontX" min="1" max="5" step="0.5" value="2">
+    </label>
+    <label for="seaDistoration">
+        Sea Distoration
+        <input type="range" id="sea-distoration" name="seaDistoration" min="1" max="100" step="25" value="25">
+    </label>
+    <label for="seaColor">
+        Sea Color
+        <input type="color" id="sea-color" name="seaColor" value="#001e0f">
+    </label>
+    <label for="seaSunColor">
+        Sea Reflection Color
+        <input type="color" id="sea-sun-color" name="seaSunColor" value="#A7A3F0">
+    </label>
+    <input type="submit">
+</form>
 <div id="selected-color"></div>
+
+<div id="container"></div>
 
 <script src="js/vendor/waterMaterial.js"></script>
 <script src="js/colorPalette.js"></script>
@@ -37,6 +78,7 @@
 <script src="js/ball.js"></script>
 <script src="js/leslie.js"></script>
 <script src="js/leslies.js"></script>
+<script src="js/leslieAnimation.js"></script>
 <script src="js/application.js"></script>
 </body>
 </html>

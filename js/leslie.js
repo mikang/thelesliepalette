@@ -16,7 +16,7 @@ function Leslie(textureLoader, leslieDB, options) {
         },
         flyToFront = function () {
             var final = {
-              position: { x: 0, y: 0, z: options.zMax * options.toFrontX },
+              position: { x: -50, y: 0, z: options.zMax * options.toFrontX },
               rotation: { x: Math.PI / 2, y: 0, z: Math.PI / 5 }
             };
 
@@ -32,7 +32,7 @@ function Leslie(textureLoader, leslieDB, options) {
             mesh: null,
             selected: false,
 
-            load: function (scene, callback) {
+            load: function (callback) {
                 textureLoader.load(leslieDB.name, function (leslieTexture) {
                     var box = new THREE.BoxGeometry(128, 32, 256, 1, 1, 5),
                         sidePalette = colorPalette.createColors(box, leslieDB.colors);
@@ -48,7 +48,6 @@ function Leslie(textureLoader, leslieDB, options) {
                         exports.mesh.add(drawer);
                         drawer.visible = false;
                     });
-                    scene.add(exports.mesh);
                     callback(exports);
                 });
             },
