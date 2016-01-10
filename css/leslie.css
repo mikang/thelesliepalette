@@ -41,7 +41,7 @@ body {
     bottom: 7em;
     right: 4em;
     font-family: 'Oswald', sans-serif;
-    background-color: #5a655a;
+    background-color: rgba(90, 101, 90, 0.7);
     z-index: 1000;
     padding: 10px;
     font-size: 1em;
