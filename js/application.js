@@ -22,6 +22,7 @@ function onControlsSubmit() {
         velocity: Number(document.getElementById('velocity').value),
         zMax: Number(document.getElementById('z-max').value),
         numberOfBallsPerLeslie: Number(document.getElementById('number-of-balls-per-leslie').value),
+        ballSizeRange: Number(document.getElementById('ball-size-range').value),
         toFrontIter: Number(document.getElementById('to-front-iter').value),
         maxLeslies: Number(document.getElementById('max-leslies').value),
         seaDistoration: Number(document.getElementById('sea-distoration').value),

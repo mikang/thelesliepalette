@@ -8,7 +8,7 @@ function Ball(color, options) {
             },
 
             load: function (callback) {
-                var radius = Math.floor(Math.random() * 15) + 25,
+                var radius = Math.floor(Math.random() * options.ballSizeRange) + 25,
                     sphere = new THREE.SphereGeometry(radius, 16, 16),
                     mesh = new THREE.MeshPhongMaterial( {color: color, vertexColors: THREE.FaceColors} );
                 exports.mesh = new THREE.Mesh(sphere, mesh);
