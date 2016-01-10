@@ -56,6 +56,10 @@
         Velocity Leslie Animates
         <input type="range" id="to-front-iter" name="toFrontIter" min="1" max="30" value="10">
     </label>
+    <label for="seaEnabled">
+        Sea Enabled
+        <input type="checkbox" id="sea-enabled" name="seaEnabled" checked="checked">
+    </label>
     <label for="seaDistoration">
         Sea Distoration
         <input type="range" id="sea-distoration" name="seaDistoration" min="0" max="100" step="25" value="25">
@@ -74,6 +78,7 @@
 
 <div id="container"></div>
 
+<script src="js/vendor/orbitControls.js"></script>
 <script src="js/vendor/waterMaterial.js"></script>
 <script src="js/colorPalette.js"></script>
 <script src="js/helpers.js"></script>

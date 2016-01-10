@@ -6,8 +6,10 @@ window.onload = function() {
             velocity: 3,
             zMax: 200,
             numberOfBallsPerLeslie: 2,
+            ballSizeRange: 15,
             toFrontIter: 10,
             maxLeslies: null,
+            seaEnabled: true,
             seaDistoration: 25.0,
             seaColor: 0x001e0f,
             seaSunColor: 0xA7A3F0
@@ -25,13 +27,14 @@ function onControlsSubmit() {
         ballSizeRange: Number(document.getElementById('ball-size-range').value),
         toFrontIter: Number(document.getElementById('to-front-iter').value),
         maxLeslies: Number(document.getElementById('max-leslies').value),
+        seaEnabled: document.getElementById('sea-enabled').checked,
         seaDistoration: Number(document.getElementById('sea-distoration').value),
         seaColor: document.getElementById('sea-color').value,
         seaSunColor: document.getElementById('sea-sun-color').value,
     };
     console.log(newOptions);
 
-    leslieAnimation.remove();
+    leslieAnimation.unload();
     leslieAnimation.load(newOptions);
     toggleControls();
 

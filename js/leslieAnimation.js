@@ -4,6 +4,7 @@ function LeslieAnimation() {
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 10000),
         scene = new THREE.Scene(),
         renderer = new THREE.WebGLRenderer(),
+        controls = new THREE.OrbitControls( camera, renderer.domElement );
         lights = new Lights(),
         leslies = new Leslies(camera),
         sea = new Sea(),
@@ -12,6 +13,7 @@ function LeslieAnimation() {
             animationId = requestAnimationFrame(animate);
             leslies.animate();
             sea.animate();
+            controls.update();
             renderer.render(scene, camera);
         },
         onWindowResize = function () {
@@ -27,6 +29,9 @@ function LeslieAnimation() {
         };
 
     camera.position.z = 800;
+    controls.enableDamping = true;
+	controls.dampingFactor = 0.25;
+	controls.enableZoom = false;
     renderer.setClearColor(0xf0f0f0);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -42,12 +47,16 @@ function LeslieAnimation() {
 
     return {
         load: function (options) {
-            sea.load(renderer, camera, scene, lights.lights[0], options);
+            controls.reset();
+            camera.position.z = 800;
+            if (options.seaEnabled) {
+                sea.load(renderer, camera, scene, lights.lights[0], options);
+            }
             leslies.load(scene, options);
             animate();
         },
 
-        remove: function () {
+        unload: function () {
             if (animationId) {
                 window.cancelAnimationFrame(animationId);
                 animationId = null;
